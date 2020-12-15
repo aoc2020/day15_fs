@@ -14,19 +14,21 @@ type Cache (map:Map<int64,int64>) as self =
         Cache(newMap)
     member this.last (num:int64) (turn:int64) : int64 =
         if map.ContainsKey num then
-            printfn "Seen %d at round %d" num (map.[num])
+//            printfn "Seen %d at round %d" num (map.[num])
             turn - map.[num]; 
         else
-            printfn "Never seen before: %d" num 
+//            printfn "Never seen before: %d" num 
             0L
 
 let rec readMore (numbers:List<int64>) (lastTime:Cache) (turn:int64) =
+    if turn % 1000000L = 0L then
+        printf "."
     let prev : int64 = numbers.Head  
-    if turn = 2020L then
+    if turn = 30000000L then
         prev 
     else 
         let since : int64 = lastTime.last prev turn 
-        printfn "@[%d] %d was last seen %d rounds ago" turn prev since 
+//        printfn "@[%d] %d was last seen %d rounds ago" turn prev since 
         let newCache : Cache = lastTime.add prev turn        
         readMore (since::numbers) newCache (turn+1L)         
 
@@ -45,6 +47,6 @@ let main argv =
     let input2 = [|0L;3L;6L|]
     let input = [|11L;18L;0L;20L;1L;7L;16L|]
     let message = "from hello"
-    let answer = task1 input2
+    let answer = task1 input
     printfn "Answer %d" answer 
     0 // return an integer exit code
