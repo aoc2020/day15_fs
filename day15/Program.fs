@@ -1,23 +1,15 @@
-﻿// Learn more about F# at http://docs.microsoft.com/dotnet/fsharp
-
-
-open System
-
-let addOneToSecond (pair:int64*int64):int64*int64 = (fst pair,snd pair + 1L)
+﻿let addOneToSecond (pair:int64*int64):int64*int64 = (fst pair,snd pair + 1L)
 let swapPair (pair:int64*int64) : int64*int64 = (snd pair,fst pair)
 
 type Cache (map:Map<int64,int64>) as self =
     member this.Map = map
     member this.add (num:int64) (turn:int64) =
-//        printfn "Add: num=%d at turn=%d" num turn 
         let newMap = map.Add (num,turn) 
         Cache(newMap)
     member this.last (num:int64) (turn:int64) : int64 =
         if map.ContainsKey num then
-//            printfn "Seen %d at round %d" num (map.[num])
             turn - map.[num]; 
         else
-//            printfn "Never seen before: %d" num 
             0L
 
 let rec readMore (numbers:List<int64>) (lastTime:Cache) (turn:int64) =
@@ -25,10 +17,10 @@ let rec readMore (numbers:List<int64>) (lastTime:Cache) (turn:int64) =
         printf "."
     let prev : int64 = numbers.Head  
     if turn = 30000000L then
+        printfn ""
         prev 
     else 
         let since : int64 = lastTime.last prev turn 
-//        printfn "@[%d] %d was last seen %d rounds ago" turn prev since 
         let newCache : Cache = lastTime.add prev turn        
         readMore (since::numbers) newCache (turn+1L)         
 
